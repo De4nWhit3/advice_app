@@ -1,9 +1,24 @@
+import 'package:advisor/application/pages/advice/bloc/bloc/advisor_bloc.dart';
+import 'package:advisor/application/pages/advice/widgets/advice_field.dart';
 import 'package:advisor/application/pages/advice/widgets/custom_button.dart';
 import 'package:advisor/application/pages/advice/widgets/error_message.dart';
 import 'package:advisor/core/services/theme_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+
+class AdvicePageWrapperProvider extends StatelessWidget {
+  const AdvicePageWrapperProvider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => AdvisorBloc(),
+      child: AdvicePage(),
+    );
+  }
+}
 
 class AdvicePage extends StatelessWidget {
   const AdvicePage({super.key});
@@ -40,12 +55,19 @@ class AdvicePage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Center(
-                          // child: Text('Your advice is waiting for you'),
-                          // child: CircularProgressIndicator.adaptive(),
-                          // child: AdviceField(advice: 'Your day will be great!'),
-                          child: ErrorMessage(
-                            errorMessage:
-                                'This is some error. Brrrl brrrl brrrl!',
+                          child: BlocBuilder<AdvisorBloc, AdvisorState>(
+                            builder: (context, state) {
+                              if (state is AdvisorLoadingState) {
+                                return CircularProgressIndicator.adaptive();
+                              } else if (state is AdvisorLoadedState) {
+                                return AdviceField(advice: state.advice);
+                              } else if (state is AdvisorErrorState) {
+                                return ErrorMessage(
+                                  errorMessage: state.errorMessage,
+                                );
+                              }
+                              return Text('Your advice is waiting for you');
+                            },
                           ),
                         ),
                       ),

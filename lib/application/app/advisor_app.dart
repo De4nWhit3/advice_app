@@ -30,7 +30,7 @@ class AdvisorApp extends StatelessWidget {
           themeMode:
               themeService.isDarkModeOn ? ThemeMode.dark : ThemeMode.light,
           debugShowCheckedModeBanner: false,
-          home: AdvicePage(),
+          home: AdvicePageWrapperProvider(),
         );
       },
     );

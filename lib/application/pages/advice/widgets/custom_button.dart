@@ -1,4 +1,6 @@
+import 'package:advisor/application/pages/advice/bloc/bloc/advisor_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key});
@@ -7,7 +9,10 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () {
-        print('brl brl brllllll!');
+        Provider.of<AdvisorBloc>(
+          context,
+          listen: false,
+        ).add(RequestAdviceEvent(param: 'some fake param'));
       },
       child: Material(
         elevation: 20,
