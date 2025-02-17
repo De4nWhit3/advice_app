@@ -1,4 +1,4 @@
-import 'package:advisor/application/pages/advice/bloc/cubit/advisor_cubit.dart';
+import 'package:advisor/application/pages/advice/bloc/bloc/advisor_bloc.dart';
 import 'package:advisor/application/pages/advice/widgets/advice_field.dart';
 import 'package:advisor/application/pages/advice/widgets/custom_button.dart';
 import 'package:advisor/application/pages/advice/widgets/error_message.dart';
@@ -8,20 +8,20 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-class AdvicePageWrapperProvider extends StatelessWidget {
-  const AdvicePageWrapperProvider({super.key});
+class AdvicePageWrapperProviderOld extends StatelessWidget {
+  const AdvicePageWrapperProviderOld({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AdvisorCubit(),
-      child: AdvicePage(),
+      create: (context) => AdvisorBloc(),
+      child: AdvicePageOld(),
     );
   }
 }
 
-class AdvicePage extends StatelessWidget {
-  const AdvicePage({super.key});
+class AdvicePageOld extends StatelessWidget {
+  const AdvicePageOld({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +55,13 @@ class AdvicePage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Center(
-                          child: BlocBuilder<AdvisorCubit, AdvisorCubitState>(
+                          child: BlocBuilder<AdvisorBloc, AdvisorState>(
                             builder: (context, state) {
-                              if (state is AdvisorCubitStateLoading) {
+                              if (state is AdvisorLoadingState) {
                                 return CircularProgressIndicator.adaptive();
-                              } else if (state is AdvisorCubitStateLoaded) {
+                              } else if (state is AdvisorLoadedState) {
                                 return AdviceField(advice: state.advice);
-                              } else if (state is AdvisorCubitStateError) {
+                              } else if (state is AdvisorErrorState) {
                                 return ErrorMessage(
                                   errorMessage: state.errorMessage,
                                 );
